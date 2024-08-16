@@ -32,8 +32,15 @@ function QRReader2() {
     startWebcam();
   }, []);
 
-  function ChnagePage() {
-    navigate("/ShowQRCodeData", { state: { key: "value" }, replace: true });
+  useEffect(() => {
+    return () => {
+      console.log("DESTROY CALLED");
+    };
+  }, []);
+
+  function ChnagePage(dataValue: string) {
+    console.log("Parametro passato iniziale:" + dataValue);
+    navigate("/ShowQRCodeData", { state: { id: dataValue, color: "green" } });
   }
 
   function ChnagePageHome() {
@@ -60,16 +67,32 @@ function QRReader2() {
   };
 
   // Function to stop the webcam
-  const StopWebcam = () => {
-    if (mediaStream) {
-      mediaStream.getTracks().forEach((track) => {
-        track.stop();
-      });
-      setMediaStream(null);
+  const StopWebcam = async () => {
+    console.log("Ingresso in stop webcam");
 
-      if (videoRef.current) {
-        videoRef.current.pause();
-      }
+    if (videoRef.current) {
+      console.log("Ingresso in stop webcam3");
+      //videoRef.current.pause();
+      videoRef.current.removeAttribute("src");
+      //videoRef.current.load();
+      videoRef.current.srcObject = null;
+      videoRef.current.load();
+    }
+
+    const tt: MediaStream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+    });
+
+    if (tt) {
+      console.log("Ingresso in stop webcam2");
+      tt.getTracks().forEach((track) => {
+        console.log(track.label);
+        track.stop();
+        track.enabled = false;
+        console.log(track.readyState);
+        //tt.removeTrack(track);
+      });
+      //setMediaStream(null);
     }
   };
 
@@ -147,7 +170,7 @@ function QRReader2() {
 
           console.log("Stop webcam");
           StopWebcam();
-          ChnagePage();
+          ChnagePage(code.data);
         } else {
           setoutputMessageHidden(false);
           setoutputDataParentHidden(true);

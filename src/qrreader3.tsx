@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useZxing } from "react-zxing";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const BarcodeScanner = () => {
   const navigate = useNavigate();
@@ -9,13 +10,25 @@ export const BarcodeScanner = () => {
   const [error, setError] = useState("");
   const [decodeError, setDecodeError] = useState("");
 
-  function ChnagePage() {
+  useEffect(() => {
+    return () => {
+      console.log("DESTROY CALLED");
+    };
+  }, []);
+
+  function ChnagePage(dataValue: string) {
+    console.log("Parametro passato iniziale:" + dataValue);
+    navigate("/ShowQRCodeData", { state: { id: dataValue, color: "green" } });
+  }
+
+  function ChnagePageHome() {
     navigate("/");
   }
 
   const { ref } = useZxing({
     onDecodeResult(result) {
-      setResult(result.getText());
+      ChnagePage(result.getText());
+      //setResult(result.getText());
     },
     onDecodeError(decodeError) {
       setDecodeError(Date.now().toLocaleString() + " " + decodeError.message);
@@ -44,7 +57,7 @@ export const BarcodeScanner = () => {
             </p>
 
             <p>
-              <button className="button-style" onClick={ChnagePage}>
+              <button className="button-style" onClick={ChnagePageHome}>
                 Home
               </button>
             </p>

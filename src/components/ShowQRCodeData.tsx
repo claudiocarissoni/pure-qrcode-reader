@@ -4,9 +4,9 @@ import { useLocation } from "react-router-dom";
 
 export default function ShowQRCodeData() {
   const navigate = useNavigate();
-  let location = useLocation();
-
-  console.log("Valore passato " + location.state);
+  const { state } = useLocation();
+  const dataRead = state.id;
+  console.log("Valore passato " + dataRead);
 
   function ChnagePage() {
     navigate("/");
@@ -14,9 +14,15 @@ export default function ShowQRCodeData() {
 
   return (
     <>
-      <h1>Dettaglio codice QR</h1>
-
-      <button onClick={ChnagePage}>Home</button>
+      <div className="main_container">
+        <div className="horizontally">
+          <h2>Contenuto codice QR</h2>
+          <p>{dataRead}</p>
+          <button className="button-style" onClick={ChnagePage}>
+            Home
+          </button>
+        </div>
+      </div>
     </>
   );
 }
