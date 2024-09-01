@@ -29,13 +29,8 @@ function QRReader2() {
   const w = 0;
 
   useEffect(() => {
+    console.log("Avvio della webcam");
     startWebcam();
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      console.log("DESTROY CALLED");
-    };
   }, []);
 
   function ChnagePage(dataValue: string) {
@@ -67,34 +62,25 @@ function QRReader2() {
   };
 
   // Function to stop the webcam
-  const StopWebcam = async () => {
+  function StopWebcam() {
     console.log("Ingresso in stop webcam");
 
-    if (videoRef.current) {
-      console.log("Ingresso in stop webcam3");
-      //videoRef.current.pause();
-      videoRef.current.removeAttribute("src");
-      //videoRef.current.load();
-      videoRef.current.srcObject = null;
-      videoRef.current.load();
-    }
-
-    const tt: MediaStream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-    });
-
-    if (tt) {
+    if (mediaStream) {
       console.log("Ingresso in stop webcam2");
-      tt.getTracks().forEach((track) => {
+      mediaStream.getTracks().forEach((track) => {
         console.log(track.label);
         track.stop();
         track.enabled = false;
         console.log(track.readyState);
-        //tt.removeTrack(track);
       });
-      //setMediaStream(null);
+      setMediaStream(null);
     }
-  };
+
+    if (videoRef.current) {
+      console.log("Ingresso in stop webcam3");
+      videoRef.current.srcObject = null;
+    }
+  }
 
   function drawRectangular(
     canvasObj: CanvasRenderingContext2D,

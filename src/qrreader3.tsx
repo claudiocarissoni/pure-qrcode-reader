@@ -12,12 +12,13 @@ export const BarcodeScanner = () => {
 
   useEffect(() => {
     return () => {
-      console.log("DESTROY CALLED");
+      console.log("DESTROY CALLED Reader3");
     };
   }, []);
 
   function ChnagePage(dataValue: string) {
     console.log("Parametro passato iniziale:" + dataValue);
+    window.navigator.vibrate(500);
     navigate("/ShowQRCodeData", { state: { id: dataValue, color: "green" } });
   }
 
@@ -44,7 +45,7 @@ export const BarcodeScanner = () => {
         <div className="horizontally">
           <h1>Inquadro un QR Code</h1>
 
-          <video className="video-element" ref={ref} />
+          <video className="video-element" ref={ref} autoPlay muted />
 
           <div id="output">
             <p>
