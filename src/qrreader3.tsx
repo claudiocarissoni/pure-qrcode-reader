@@ -18,7 +18,6 @@ export const BarcodeScanner = () => {
 
   function ChnagePage(dataValue: string) {
     console.log("Parametro passato iniziale:" + dataValue);
-    window.navigator.vibrate(500);
     navigate("/ShowQRCodeData", { state: { id: dataValue, color: "green" } });
   }
 
